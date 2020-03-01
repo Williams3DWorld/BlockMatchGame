@@ -1,0 +1,30 @@
+{
+  "name": "blockmatchgame",
+  "version": "1.0.0",
+  "description": "Match the coloured blocks.",
+  "scripts": {
+    "build": "webpack --mode production",
+    "server": "webpack-dev-server --mode development --open --hot",
+    "develop": "webpack --mode development --watch",
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Williams3DWorld/BlockMatchGame.git"
+  },
+  "author": "William",
+  "license": "ISC",
+  "dependencies": {
+    "pixi.js": "^5.2.1",
+    "webpack-dev": "^1.1.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
