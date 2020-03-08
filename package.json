@@ -15,6 +15,7 @@
   "author": "William",
   "license": "ISC",
   "dependencies": {
+    "pixi-sound": "^3.0.4",
     "pixi.js": "^5.2.1",
     "webpack-dev": "^1.1.1"
   },

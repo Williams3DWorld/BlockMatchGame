@@ -1,32 +1,59 @@
 import * as PIXI from "pixi.js";
+import { Globals } from "./Globals"
+import { Game } from "./Game"
+import { Block, BlockType } from "./Block"
+import { ContentManager } from "./ContentManager"
+import { SearchParameters } from "./Dictionary"
+import { Level } from "./Level";
 
-window.onload = function() {
-  console.log("Game loaded!");
+// Initialisation
+window.onload = function () {
+  // Initialise PIXI application
+  Globals.InitialiseApp();
 
-  // Set up canvas size and background
-  let app = new PIXI.Application({
-    width: 800,
-    height: 600,
-    backgroundColor: 0x0d0d0d
-  });
-  document.body.appendChild(app.view);
+  // Initialise content
+  ContentManager.PreloadContent();
 
-  // URL Cotnent
-  app.loader.add("block", "assets/Player.png"); // Store url content
+  // Set up callback funcitons during content load
+  Globals.app.loader.onProgress.add(showProgress);
+  Globals.app.loader.onComplete.add(doneLoading);
+  Globals.app.loader.onError.add(reportError);
 
-  // Load atlas map
-  let atlas_texture = PIXI.BaseTexture.from(app.loader.resources["block"].url); // Load url content
-
-  // Crop sub-images from atlas
-  let sub_tex_0 = new PIXI.Texture( // Sub texture from atlas
-    atlas_texture,
-    new PIXI.Rectangle(0, 0, 32, 32)
-  );
-
-  // Set up player
-  let block = new PIXI.Sprite(sub_tex_0); // Spritesheet
-  block.anchor.set(0.5); // Center pivot
-  block.x = app.view.width / 2; // Position x
-  block.y = app.view.height / 2; // Position y
-  app.stage.addChild(block); // Add to the world
+  // Load all content
+  Globals.app.loader.load();
 };
+
+// Debug loading performance
+function showProgress(e) {
+  console.log(e.progress);
+}
+
+// Debug errors during load-time
+function reportError(e) {
+  console.log(`ERROR: ${e.message}`);
+}
+
+// Things to call after content has finished loading
+function doneLoading(e) {
+  console.log("PRE-LOADED CONTENT!");
+
+  // Initialise game content
+  ContentManager.PackContent();
+
+  // Initialise game object - level 1
+  Globals.game = new Game(ContentManager.levels["enchanted_caves"]);
+
+  // Call game loop for logic
+  Globals.app.ticker.add(update);
+}
+
+function initialiseBlocks() {
+  // Load blocks here... DICTIONARY!
+  let block_list = new SearchParameters();
+  block_list.SearchFor[0] = new Block(BlockType.BLOCK_TYPE_DIAMOND, 75, 75);
+}
+
+// Game logic
+function update(delta) {
+  Globals.game.update();
+}
